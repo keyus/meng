@@ -52,6 +52,10 @@ class Fuben():
         if util.has('img/task-fb/select-erchongyin.png') and util.has('img/task-fb/finish-erchongyin.png') == None:
             return self.selectErchongyin()
 
+         # 存在绿烟副本且未完成
+        if util.has('img/task-fb/select-lvyan.png') :
+            return self.selectLvyan()
+
         print('今日50级普通副本已完成，没有可以领取的副本')
 
     # 选择琉璃碎
@@ -71,6 +75,16 @@ class Fuben():
             return
         self.erchongyingIng = True
         print('二重影副本开始...')
+        self.loop()
+        return True
+
+     # 选择绿烟如梦
+    def selectLvyan (self):
+        res = util.clickEnd('img/task-fb/select-lvyan.png', 5, 5, 4)
+        if res == False:
+            return
+        self.erchongyingIng = True
+        print('绿烟如梦副本开始...')
         self.loop()
         return True
 
@@ -111,6 +125,12 @@ class Fuben():
             self.liulisuiFinish = True
 
             self.run()
+            return
+
+        # 副本-绿烟
+        if util.click('img/task-fb/text-lvyan.png', 5, 5, 4):
+            print('点击 副本-绿烟如梦...')
+            self.loop()
             return
 
         # 副本-普通
