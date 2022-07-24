@@ -7,7 +7,7 @@ import time
 # 分辩率使用配置5 
 # 即在屏幕平铺5个游戏号窗口,支持同时压镖5个账号
 class YunBiao():
-    count = 1
+    count = 0
     def __init__(self):
         # screen.set(5)
         # time.sleep(3)
@@ -58,7 +58,7 @@ class YunBiao():
 
         print('loop 监听...')
 
-        if self.count > 100 :
+        if self.count >= 15 :
             print('运镖任务END')
             return 
 
@@ -68,9 +68,10 @@ class YunBiao():
             time.sleep(5)
             self.loop()
             return 
-
-        if util.clickEndAll('img/task-yunbiao/confirm.png'):
-            self.count = self.count + 5
+        
+        res = util.clickEndAll('img/task-yunbiao/confirm.png',5,5,1,True)
+        if res:
+            self.count = self.count + res
             print('确认运镖')
             print('count', self.count)
             time.sleep(5)

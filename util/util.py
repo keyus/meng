@@ -80,17 +80,21 @@ def clickAll(src, offsetX=5, offsetY=5, sleepTime=1, returnClicks=False):
 
 
 # 点击所有坐标点
-def clickEndAll(src, offsetX=5, offsetY=5, sleepTime=1):
+def clickEndAll(src, offsetX=5, offsetY=5, sleepTime=1,returnClicks=False):
     res = gui.locateAllOnScreen(src, confidence=0.9)
     res = list(res)
     length = len(res)
-
+    count = 0
     if length > 0:
         for loc in res:
             x = loc.left + loc.width - offsetX
             y = loc.top + loc.height - offsetY
             gui.click(x, y)
+            count = count + 1
             sleep(sleepTime)
+
+        if returnClicks: 
+            return count
         return True
 
     return False

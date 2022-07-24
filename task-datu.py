@@ -26,9 +26,11 @@ class Datu():
             print('打图时间结束,超出失败尝试次数')
             return 
 
-        res = util.clickEndAll('img/task-tu/tu.png',10,8)
-        # 记录未点击找到次数
-        if res == False: 
+        res = util.clickEndAll('img/task-tu/tu.png',10,8,1,True)
+        if res : 
+            self.count = self.count + res
+            print('点击',self.count,'张图')
+        else:
             self.faild = self.faild + 1
 
         util.sleep(5)

@@ -17,43 +17,43 @@ class MiJing():
     def run(self):
         print('秘境：running....')
 
-        # #到达东海湾
-        # if util.clickMapDonghaiAll() == False:
-        #     return 
+        #到达东海湾
+        if util.clickMapDonghaiAll() == False:
+            return 
 
-        # # NPC 坐标点
-        # if util.clickEndAll('img/common/screen5/map-donghai-2.png') == False:
-        #     return 
+        # NPC 坐标点
+        if util.clickEndAll('img/common/screen5/map-donghai-2.png') == False:
+            return 
 
-        # # 云乐游 
-        # if util.clickEndAll('img/common/screen5/npc-yunleyou.png') == False:
-        #     return
+        # 云乐游 
+        if util.clickEndAll('img/common/screen5/npc-yunleyou.png') == False:
+            return
 
-        # print('正在跑步向前，寻找云乐游...预计6秒')
-        # time.sleep(6)
-        # print('6秒结束...')
+        print('正在跑步向前，寻找云乐游...预计6秒')
+        time.sleep(6)
+        print('6秒结束...')
 
-        # # # 弹出任务
-        # if util.clickEndAll('img/task-mijing/task.png') == False:
-        #     return
-        # print('开始领取任务')
+        # # 弹出任务
+        if util.clickEndAll('img/task-mijing/task.png') == False:
+            return
+        print('开始领取任务')
 
-        # time.sleep(3)
-        # # 点击第一关
-        # if util.clickAll('img/task-mijing/first.png',40,-30) == False:
-        #     return
+        time.sleep(3)
+        # 点击第一关
+        if util.clickAll('img/task-mijing/first.png',40,-30) == False:
+            return
 
-        # time.sleep(3)
+        time.sleep(3)
 
-        # # 进入第一关
-        # if util.clickEndAll('img/task-mijing/button.png',0,7) == False:
-        #     return
+        # 进入第一关
+        if util.clickEndAll('img/task-mijing/button.png',0,7) == False:
+            return
         
-        # # 点击任务栏 第一关文字
-        # if util.clickAll('img/task-mijing/text.png',0,15) == False:
-        #     return
+        # 点击任务栏 第一关文字
+        if util.clickAll('img/task-mijing/text.png',0,15) == False:
+            return
 
-        # # 启动循环任务
+        # 启动循环任务
         self.loop()
 
     # 循环任务
@@ -65,7 +65,7 @@ class MiJing():
             return 
 
         # 点击战斗
-        if util.clickAll('img/task-mijing/task-zhandou.png',0, -8) == True:
+        if util.clickAll('img/task-mijing/task-zhandou.png',0, -8) :
             print('点击战斗')
             util.sleep(3)
             self.loop()
@@ -78,7 +78,7 @@ class MiJing():
             self.loop()
             return 
 
-        util.sleep(3)
+        util.sleep(5)
         self.loop()
 
 
