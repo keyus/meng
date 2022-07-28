@@ -10,15 +10,15 @@ class MiJing():
     count = 1
     leave = 0
     def __init__(self):
-        # screen.set(5)
-        # time.sleep(3)
+        screen.set(5)
+        time.sleep(3)
         self.run()
 
     def run(self):
         print('秘境：running....')
 
         #到达东海湾
-        if util.clickMapDonghaiAll() == False:
+        if util.clickDonghaiAll() == False:
             return 
 
         # NPC 坐标点

@@ -11,14 +11,14 @@ class Datu():
     count = 0
     faild = 0
     def __init__(self):
-        screen.set(5)
-        time.sleep(2)
+        # screen.set(5)
+        # time.sleep(2)
         self.run()
 
     def run(self):
         print('打图：running....', self.count)
 
-        if self.count > 100 : 
+        if self.count > 200 : 
             print('打图END')
             return 
 
@@ -26,9 +26,9 @@ class Datu():
             print('打图时间结束,超出失败尝试次数')
             return 
 
-        res = util.clickEndAll('img/task-tu/tu.png',10,8,1,True)
-        if res : 
-            self.count = self.count + res
+        box = util.clickEndAll('img/task-tu/tu.png',20,-46)
+        if box : 
+            self.count = self.count + box
             print('点击',self.count,'张图')
         else:
             self.faild = self.faild + 1

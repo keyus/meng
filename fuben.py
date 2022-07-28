@@ -25,12 +25,12 @@ class Fuben():
     def start(self):
         print('副本：running....')
 
-        # 世界地图
-        if util.clickMap() == False:
+        # 长安
+        if util.clickChangan() == False:
             return 
 
         # 长安城NPC地图
-        res = util.clickEnd('img/common/screen1/map-changancheng-2.png')
+        res = util.clickEnd('img/common/screen1/map-changan-2.png')
         if res == False:
             return
 
@@ -92,7 +92,11 @@ class Fuben():
     # 循环任务
     # 1.检测跳过剧情
     def loop(self):
-        if util.isZhandou():
+        if util.stop : 
+            print('按下空格键  任务结束')
+            return 
+
+        if util.isFighting():
             util.sleep(5)
             print('战斗中...')
             self.loop()
@@ -142,4 +146,5 @@ class Fuben():
         util.sleep(8)
         self.loop()
 
+util.start_listen()
 Fuben()

@@ -1,4 +1,3 @@
-from itertools import count
 import util.screen as screen
 import util.util as util
 import time
@@ -15,32 +14,29 @@ class YunBiao():
 
     def run(self):
         print('运镖：running....')
-         # 世界地图
-        if util.clickMapAll() == False:
+        if util.clickChanganAll() == False:
             return 
 
          # 长安城NPC地图
-        res = util.clickEndAll('img/common/screen5/map-changan-2.png')
-        if res == False:
+        if util.clickEndAll('img/common/screen5/map-changan-2.png') == False:
             return
+        time.sleep(4)
         # NPC
-        res = util.clickEndAll('img/common/screen5/npc-biao.png',10,3)
-        if res == False:
+        if util.clickCenterAll('img/common/screen5/npc-biao.png') == False:
             return
-        
-        print('正在跑步向前，寻找郑镖头...预计20秒')
-        time.sleep(20)
-        print('20秒结束...')
+
+        print('正在跑步向前，寻找郑镖头...预计16秒')
+        time.sleep(16)
+        print('16秒结束...')
 
         # 弹出任务
-        res = util.clickEndAll('img/task-yunbiao/task.png')
-        if res == False:
+        if util.clickCenterAll('img/task-yunbiao/task.png') == False:
             return
         print('开始领取任务')
 
         time.sleep(8)
         # 确认压镖
-        res = util.clickEndAll('img/task-yunbiao/confirm.png')
+        res = util.clickCenterAll('img/task-yunbiao/confirm.png')
         if res == False:
             print('运镖已结束')
             return
@@ -48,37 +44,38 @@ class YunBiao():
         print('领取任务成功')
 
         time.sleep(20)
-
-        self.count = self.count + 5
+        self.count = self.count + res
         # 启动循环任务
         self.loop()
 
     # 循环任务
     def loop(self):
 
-        print('loop 监听...')
+        if util.stop : 
+            print('按下空格键  任务结束')
+            return 
+
 
         if self.count >= 15 :
             print('运镖任务END')
             return 
 
         # 弹出任务 点击
-        if util.clickEndAll('img/task-yunbiao/task.png'):
+        if util.clickCenterAll('img/task-yunbiao/task.png'):
             print('运镖任务')
             time.sleep(5)
             self.loop()
             return 
         
-        res = util.clickEndAll('img/task-yunbiao/confirm.png',5,5,1,True)
-        if res:
-            self.count = self.count + res
+        box = util.clickCenterAll('img/task-yunbiao/confirm.png')
+        if box:
+            self.count = self.count + box
             print('确认运镖')
             print('count', self.count)
             time.sleep(5)
-            self.loop()
-            return 
 
+        print('loop...')
         self.loop()
 
-
+util.start_listen()
 YunBiao()
