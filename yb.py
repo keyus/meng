@@ -8,35 +8,26 @@ import time
 class YunBiao():
     count = 0
     def __init__(self):
-        # screen.set(5)
-        # time.sleep(3)
         self.run()
+        # self.loop()
 
     def run(self):
         print('运镖：running....')
-        if util.clickChanganAll() == False:
+        
+        if util.clickNpc('biao') == False:
             return 
-
-         # 长安城NPC地图
-        if util.clickEndAll('img/common/screen5/map-changan-2.png') == False:
-            return
-        time.sleep(4)
-        # NPC
-        if util.clickCenterAll('img/common/screen5/npc-biao.png') == False:
-            return
 
         print('正在跑步向前，寻找郑镖头...预计16秒')
         time.sleep(16)
         print('16秒结束...')
 
         # 弹出任务
-        if util.clickCenterAll('img/task-yunbiao/task.png') == False:
-            return
-        print('开始领取任务')
+        if util.clickSelectAll():
+            print('开始领取任务')
 
         time.sleep(8)
         # 确认压镖
-        res = util.clickCenterAll('img/task-yunbiao/confirm.png')
+        res = util.clickCenterAll('images/yb/confirm.png')
         if res == False:
             print('运镖已结束')
             return
@@ -61,21 +52,19 @@ class YunBiao():
             return 
 
         # 弹出任务 点击
-        if util.clickCenterAll('img/task-yunbiao/task.png'):
+        if util.clickSelectAll():
             print('运镖任务')
-            time.sleep(5)
-            self.loop()
-            return 
+            time.sleep(2)
         
-        box = util.clickCenterAll('img/task-yunbiao/confirm.png')
+        box = util.clickCenterAll('images/yb/confirm.png')
         if box:
             self.count = self.count + box
             print('确认运镖')
             print('count', self.count)
-            time.sleep(5)
 
+        time.sleep(3)
         print('loop...')
-        self.loop()
+        return self.loop()
 
 util.start_listen()
 YunBiao()

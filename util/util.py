@@ -3,7 +3,9 @@ import util.screen as screen
 from dataclasses import dataclass
 import time
 from pynput import keyboard
+import sys  
 
+sys.setrecursionlimit(1000000)
 
 # 游戏窗口数量
 use = screen.use
@@ -32,10 +34,19 @@ def end(box, offsetX=0, offsetY=0):
     return Point(box, offsetX, offsetY)
 
 
-def click(src, offsetX=5, offsetY=5, sleepTime=1.2):
-    box = gui.locateOnScreen(src, confidence=0.9)
+def click(src, offsetX=5, offsetY=5, sleepTime=1,confidence= 0.9):
+    box = gui.locateOnScreen(src, confidence=confidence)
     if box:
         gui.click(box.left + offsetX, box.top + offsetY)
+        sleep(sleepTime)
+        return 1
+    return False
+
+def clickCenter(src, sleepTime=1,confidence= 0.9):
+    box = gui.locateOnScreen(src, confidence=confidence)
+    if box:
+        loc = gui.center(box)
+        gui.click(loc.x, loc.y)
         sleep(sleepTime)
         return 1
     return False
@@ -51,8 +62,8 @@ def clickEnd(src, offsetX=5, offsetY=5, sleepTime=1.2):
     return False
 
 
-def doubleClick(src, offsetX=5, offsetY=5, sleepTime=1.2):
-    box = gui.locateOnScreen(src, confidence=0.9)
+def doubleClick(src, offsetX=5, offsetY=5, sleepTime=1.2, confidence= 0.9):
+    box = gui.locateOnScreen(src, confidence=confidence)
     if box:
         gui.doubleClick(box.left + offsetX,  box.top + offsetY)
         sleep(sleepTime)
@@ -70,8 +81,8 @@ def doubleClickEnd(src, offsetX=5, offsetY=5, sleepTime=1.2):
     return False
 
 
-def clickAll(src, offsetX=5, offsetY=5, sleepTime=1.2):
-    box = list(gui.locateAllOnScreen(src, confidence=0.9))
+def clickAll(src, offsetX=5, offsetY=5, sleepTime=1, confidence = 0.9):
+    box = list(gui.locateAllOnScreen(src, confidence= confidence))
     lens = len(box)
     if lens > 0:
         for loc in box:
@@ -81,9 +92,8 @@ def clickAll(src, offsetX=5, offsetY=5, sleepTime=1.2):
     return False
 
 
-def clickCenterAll(src, sleepTime=0.6):
-    box = list(gui.locateAllOnScreen(src, confidence=0.9))
-
+def clickCenterAll(src, sleepTime=1,confidence=0.9):
+    box = list(gui.locateAllOnScreen(src, confidence=confidence))
     lens = len(box)
     if lens > 0:
         for loc in box:
@@ -116,72 +126,146 @@ def doubleClickEndAll(src, offsetX=5, offsetY=5, sleepTime=1):
         return lens
     return False
 
+# locs: [[offsetX,offsetY]，[offsetX,offsetY]],  根据找到的坐标，进行点击
+def clickAllFlow(src,offset):
+    box = list(gui.locateAllOnScreen(src, confidence=0.9))
+    lens = len(box)
+    if lens > 0:
+        for it in offset:
+            for loc in box:
+                gui.click(loc.left + it[0], loc.top + it[1])
+                sleep(1)
+        return lens
+    return False
+
 # map ---------------------------------------------------------
 
 
 
 # 长安城 npc map
 def clickChangan():
-    if clickEnd('img/common/screen1/pool.png', 180, 0):
+    if click('images/common/yin.png', -120, 22):
         sleep(3)
-        if clickEnd('img/common/screen1/map-changan-1.png'):
+        if clickCenter('images/common/map-changan.png'):
             print('进入长安城')
             return True
     return False
 
 def clickChanganAll():
-    if clickEndAll('img/common/screen5/pool.png', 60, 0):
+    if clickAll('images/common/yin.png', -120, 22):
         sleep(3)
-        if doubleClickEndAll('img/common/screen5/map-changan-1.png'):
+        if clickCenterAll('images/common/map-changan.png'):
+            print('进入长安城...')
             return True
     return False
 
 
-# 东海湾 npc map
-def clickDonghaiAll():
-    if clickEndAll('img/common/screen5/pool.png', 60, 0):
-        sleep(3)
-        if clickAll('img/common/screen5/map-donghai-1.png', 20, 15):
+def clickNpc(name):
+    if clickChanganAll() == False:
+        return False
+    if clickAll('images/common/yin.png',-50,15) == False:
+        return False
+    print('打开npc 地图')
+    sleep(2)
+        
+    if name == 'ben':
+        if clickAll('images/common/npc.png',193, 207):
+            print('点击了，百晓仙子')
             return True
+    if name == 'gui':
+        if clickAll('images/common/npc.png',155, 227):
+            print('点击了，钟馗')
+            return True
+    if name == 'biao':
+        if clickAll('images/common/npc.png',90, 235):
+            print('点击了，钟馗')
+            return True
+    if name == 'tu':
+        if clickAll('images/common/npc.png',390, 210):
+            print('点击了，店小二')
+            return True
+    return False
+
+# check ---------------------------------------------------------
+
+# 统计数量
+def count(src, confidence = 0.9):
+    box =  list(gui.locateAllOnScreen(src, confidence=confidence))
+    print(box)
+    return len(box)
+
+# 是否处于战斗中
+def isFire():
+    return gui.locateOnScreen('images/common/fire.png', confidence=0.9)
+
+
+def has(src, confidence=0.9):
+    return gui.locateOnScreen(src, confidence=confidence)
+
+
+# 请选择单个
+def clickSelect():
+    if click('images/common/select.png',65,55,1,0.7):
+        print('点击了请选择')
+        return True
     return False
 
 # 请选择
 def clickSelectAll():
-    lens = clickEndAll('img/common/screen5/select.png',-19,-35)
-    if lens:
-        return lens
+    if clickAll('images/common/select.png',65,55,1,0.7):
+        print('点击了请选择')
+        return True
     return False
-
-
-# check ---------------------------------------------------------
-
-
-# 是否处于战斗中
-def isFighting():
-    return gui.locateOnScreen('img/common/screen1/zhandou.png', confidence=0.9)
-
-
-def has(src):
-    return gui.locateOnScreen(src, confidence=0.9)
-
 
 # 5开任务组，点击购买
 def clickBuy():
-    if has('img/common/screen5/yaodian.png'):
+    if has('images/common/buy-none.png'):
+        print('检测到空商品')
+        if clickCenterAll('images/common/buy-close.png'):
+            print('------点击了,关闭')
+    if has('images/common/yaodian.png'):
         print('检测到药店')
-        if clickAll('img/common/screen5/yaodian.png',188,316):
+        if clickAll('images/common/yaodian.png',200,325):
             print('------点击了,药店购买')
-    if has('img/common/screen5/baitan.png'):
+    if has('images/common/baitan.png'):
         print('检测到摆摊')
-        if clickAll('img/common/screen5/baitan.png',161,228):
-            print('------点击了,商品')
-        if clickEndAll('img/common/screen5/buy.png'):
+        if clickAllFlow('images/common/baitan.png', [[200,170],[225,370]]):
             print('------点击了,购买')
-
-    if has('img/common/screen5/shanghui.png'):
+    if has('images/common/baitan-gf.png'):
+        print('检测到工坊摆摊')
+        if clickAllFlow('images/common/baitan-gf.png', [[0,105],[235,365]]):
+            print('------点击了,工坊购买')
+      
+    if has('images/common/shanghui.png'):
         print('检测到商会')
-        if clickAll('img/common/screen5/shanghui.png',222,351):
+        if clickAll('images/common/shanghui.png',235,370):
             print('------点击了,商会购买')
+    if has('images/common/bingqi.png'):
+        print('检测到兵器铺')
+        if clickAll('images/common/bingqi.png',215,325):
+            print('------点击了,兵器铺购买')
+
+# 使用-上交
+def clickUse():
+    if clickCenterAll('images/common/give.png'):
+        print('点击了，上交')
+    if clickCenterAll('images/common/use.png'):
+        print('点击了，使用')
+
+# 任务栏第一个任务
+def clickTaskFirst():
+    if clickEndAll('images/common/book.png',-35,-25):
+        print('点击了，任务栏第一个任务')
+
+# 任务栏第二个任务
+def clickTaskTwo():
+    if clickAll('images/common/book.png',42,110):
+        print('点击了，任务栏第二个任务')
+
+# 点击任意位置继续
+def clickAnyway():
+    if doubleClickEndAll('images/common/right.png',40,5):
+        print('点击了，顶部任意位置继续')
 
 
 # listen ---------------------------------------------------------

@@ -1,6 +1,4 @@
-import util.screen as screen
 import util.util as util
-import time
 
 
 # 打图
@@ -11,30 +9,29 @@ class Datu():
     count = 0
     faild = 0
     def __init__(self):
-        # screen.set(5)
-        # time.sleep(2)
         self.run()
-
-    def run(self):
         print('打图：running....', self.count)
 
-        if self.count > 200 : 
-            print('打图END')
+
+    def run(self):
+        if util.stop : 
+            print('按下空格键  任务结束')
             return 
 
-        if self.faild > 150 :
+        if self.faild > 300 :
             print('打图时间结束,超出失败尝试次数')
             return 
 
-        box = util.clickEndAll('img/task-tu/tu.png',20,-46)
+        box = util.clickCenterAll('images/tu/use.png')
         if box : 
             self.count = self.count + box
             print('点击',self.count,'张图')
         else:
             self.faild = self.faild + 1
 
-        util.sleep(5)
+        util.sleep(3)
         self.count = self.count + 1
-        self.run()
+        return self.run()
 
+util.start_listen()
 Datu()
